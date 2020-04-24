@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 #Boa:App:BoaApp
 
-import sys
-sys.path.append(".")
-
 import Frame1
 import wx
 import time
