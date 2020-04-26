@@ -1,7 +1,7 @@
 # Boa:Frame:Frame1
 
-import os
-import sys
+# import os
+# import sys
 import wx
 import time
 import threading
@@ -14,17 +14,12 @@ from pynput import keyboard
 from pynput.mouse import Button
 from pynput.keyboard import Key, KeyCode
 
-PY2 = PY3 = False
-try:
-    import StringIO
-    from wx import TaskBarIcon as wxTaskBarIcon
-    from wx import EVT_TASKBAR_LEFT_DCLICK
-    PY2 = True
-except:
-    import io
-    from wx.adv import TaskBarIcon as wxTaskBarIcon
-    from wx.adv import EVT_TASKBAR_LEFT_DCLICK
-    PY3 = True
+import pathlib
+
+
+import io
+from wx.adv import TaskBarIcon as wxTaskBarIcon
+from wx.adv import EVT_TASKBAR_LEFT_DCLICK
 
 
 # # anther way to resolve DPI Scaling on win10
@@ -43,23 +38,19 @@ KEYS = ['F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12']
 
 
 def GetMondrianStream():
-    if PY2:
-        data = '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 \x08\x06\x00\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00qIDATX\x85\xed\xd6;\n\x800\x10E\xd1{\xc5\x8d\xb9r\x97\x16\x0b\xad$\x8a\x82:\x16o\xda\x84pB2\x1f\x81Fa\x8c\x9c\x08\x04Z{\xcf\xa72\xbcv\xfa\xc5\x08 \x80r\x80\xfc\xa2\x0e\x1c\xe4\xba\xfaX\x1d\xd0\xde]S\x07\x02\xd8>\xe1wa-`\x9fQ\xe9\x86\x01\x04\x10\x00\\(Dk\x1b-\x04\xdc\x1d\x07\x14\x98;\x0bS\x7f\x7f\xf9\x13\x04\x10@\xf9X\xbe\x00\xc9 \x14K\xc1<={\x00\x00\x00\x00IEND\xaeB`\x82'
-        stream = StringIO.StringIO(data)
-    else:
-        data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 \x08\x06\x00\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00qIDATX\x85\xed\xd6;\n\x800\x10E\xd1{\xc5\x8d\xb9r\x97\x16\x0b\xad$\x8a\x82:\x16o\xda\x84pB2\x1f\x81Fa\x8c\x9c\x08\x04Z{\xcf\xa72\xbcv\xfa\xc5\x08 \x80r\x80\xfc\xa2\x0e\x1c\xe4\xba\xfaX\x1d\xd0\xde]S\x07\x02\xd8>\xe1wa-`\x9fQ\xe9\x86\x01\x04\x10\x00\\(Dk\x1b-\x04\xdc\x1d\x07\x14\x98;\x0bS\x7f\x7f\xf9\x13\x04\x10@\xf9X\xbe\x00\xc9 \x14K\xc1<={\x00\x00\x00\x00IEND\xaeB`\x82'
-        stream = io.BytesIO(data)
+    data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 \x08\x06\x00\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00qIDATX\x85\xed\xd6;\n\x800\x10E\xd1{\xc5\x8d\xb9r\x97\x16\x0b\xad$\x8a\x82:\x16o\xda\x84pB2\x1f\x81Fa\x8c\x9c\x08\x04Z{\xcf\xa72\xbcv\xfa\xc5\x08 \x80r\x80\xfc\xa2\x0e\x1c\xe4\xba\xfaX\x1d\xd0\xde]S\x07\x02\xd8>\xe1wa-`\x9fQ\xe9\x86\x01\x04\x10\x00\\(Dk\x1b-\x04\xdc\x1d\x07\x14\x98;\x0bS\x7f\x7f\xf9\x13\x04\x10@\xf9X\xbe\x00\xc9 \x14K\xc1<={\x00\x00\x00\x00IEND\xaeB`\x82'
+    stream = io.BytesIO(data)
     return stream
 
 
 def GetMondrianBitmap():
     stream = GetMondrianStream()
-    image = wx.ImageFromStream(stream)
-    return wx.BitmapFromImage(image)
+    image = wx.Image(stream)
+    return wx.Bitmap(image)
 
 
 def GetMondrianIcon():
-    icon = wx.EmptyIcon()
+    icon = wx.Icon()
     icon.CopyFromBitmap(GetMondrianBitmap())
     return icon
 
@@ -161,7 +152,7 @@ class Frame1(wx.Frame):
 
         self.choice_start = wx.Choice(choices=[], id=wxID_FRAME1CHOICE_START,
                                       name=u'choice_start', parent=self.panel1, pos=wx.Point(79, 58),
-                                      size=wx.Size(108, 25), style=0)
+                                      size=wx.Size(108, 250), style=0)
         self.choice_start.SetLabel(u'')
         self.choice_start.SetLabelText(u'')
         self.choice_start.Bind(wx.EVT_CHOICE, self.OnChoice_startChoice,
@@ -192,12 +183,17 @@ class Frame1(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_ICONIZE, self.OnIconfiy)
 
-        if not os.path.exists('scripts'):
-            os.mkdir('scripts')
-        self.scripts = os.listdir('scripts')[::-1]
+        script_path = pathlib.Path(__file__).with_name("..").resolve()
+        print(script_path)
+        script_path = script_path / 'scripts'
+        # if not script_path.exists():
+        #    os.mkdir('scripts')
+        script_path.mkdir(parents=True, exist_ok=True)
+        self.script_path = script_path
+        self.scripts = [s.name for s in script_path.glob("*.txt")]
 
         self.choice_script.SetItems(self.scripts)
-        self.scripts = list(filter(lambda s: s.endswith('.txt'), self.scripts))
+        # self.scripts = list(filter(lambda s: s.endswith('.txt'), self.scripts))
         if self.scripts:
             self.choice_script.SetSelection(0)
 
@@ -352,9 +348,8 @@ class Frame1(wx.Frame):
         if i < 0:
             return ''
         script = self.scripts[i]
-        path = os.path.join(os.getcwd(), 'scripts', script)
-        print(path)
-        return path
+
+        return self.script_path / script
 
     def new_script_path(self):
         now = datetime.datetime.now()
@@ -468,14 +463,17 @@ class RunScriptClass(threading.Thread):
 
         self.frame.running = True
 
+        s = None
         try:
-            s = open(script_path, 'r', encoding='utf-8').read()
-            s = json.loads(s)
+            with script_path.open('r', encoding='utf-8') as jsnfile:
+                s = json.load(jsnfile)
+
+            # s = open(script_path, 'r', encoding='utf-8').read()
+            # s = json.loads(s)
             steps = len(s)
             run_times = self.frame.stimes.Value
 
-            running_text = '%s running..' % script_path.split(
-                '/')[-1].split('\\')[-1]
+            running_text = '%s running..' % script_path.name
             self.frame.tnumrd.SetLabel(running_text)
             self.frame.tstop.Shown = True
 

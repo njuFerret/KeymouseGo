@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#Boa:App:BoaApp
+# Boa:App:BoaApp
 
 import Frame1
 import wx
@@ -17,15 +17,17 @@ modules = {'Frame1': [1, 'Main frame of Application', u'Frame1.py']}
 
 
 class BoaApp(wx.App):
-    def OnInit(self):
-        self.main = Frame1.create(None)
+    def __init__(self, parent=None):
+        super().__init__()
+        # def OnInit(self):
+        self.main = Frame1.create(parent)
         self.main.Show()
         self.SetTopWindow(self.main)
-        return True
+        # return True
 
 
 def main():
-    application = BoaApp(0)
+    application = BoaApp()
     application.MainLoop()
 
 
@@ -60,7 +62,7 @@ def single_run(script_path, run_times=1):
             action = s[i][3]
 
             message = message.lower()
-            
+
             time.sleep(delay / 1000.0)
 
             if event_type == 'EM':
@@ -105,4 +107,3 @@ if __name__ == '__main__':
         single_run(script_path, run_times)
     else:
         main()
-
