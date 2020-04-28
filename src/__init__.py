@@ -15,7 +15,7 @@ finally:
     del get_distribution, DistributionNotFound
 
 
-__all__ = ['Frame1','KeymouseGo']
+#__all__ = ['Frame1','KeymouseGo']
 
-import Frame1
-import KeymouseGo
+#import Frame1
+#import KeymouseGo

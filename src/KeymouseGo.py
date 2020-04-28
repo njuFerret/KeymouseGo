@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # Boa:App:BoaApp
 
-import Frame1
+# import Frame1
+from xlog import getLogger
+from MainFrame import MainFrame
 import wx
 import time
 
@@ -12,22 +14,26 @@ from pynput import keyboard
 from pynput.mouse import Button
 from pynput.keyboard import Key, KeyCode
 
+logger = getLogger()
+# modules = {'Frame1': [1, 'Main frame of Application', u'Frame1.py']}
 
-modules = {'Frame1': [1, 'Main frame of Application', u'Frame1.py']}
 
-
-class BoaApp(wx.App):
-    def __init__(self, parent=None):
-        super().__init__()
-        # def OnInit(self):
-        self.main = Frame1.create(parent)
-        self.main.Show()
-        self.SetTopWindow(self.main)
-        # return True
+# class BoaApp(wx.App):
+#     def __init__(self, parent=None):
+#         super().__init__()
+#         # def OnInit(self):
+#         self.main = Frame1.create(parent)
+#         self.main.Show()
+#         self.SetTopWindow(self.main)
+#         # return True
 
 
 def main():
-    application = BoaApp()
+    logger.info('run')
+    logger.debug('debug')
+    application = wx.App()
+    frame = MainFrame()
+    frame.Show()
     application.MainLoop()
 
 
